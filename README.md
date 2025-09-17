@@ -1,4 +1,6 @@
-# Master's Thesis: bytesophos
+<img src="https://github.com/user-attachments/assets/2eda974f-dcfb-423f-9b70-075f4941ab94"
+       alt="bytesophos logo"
+       style="width:auto; height:48px;" />
 
 Official repository of master's thesis "Implementing a Retrieval Augmented Generation System" (2025) by David Slavik, student of University of Zagreb Faculty of Informatics.
 
