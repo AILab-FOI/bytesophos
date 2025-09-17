@@ -1,0 +1,50 @@
+site_name: bytesophos
+site_description: API and developer documentation
+
+theme:
+  name: material
+  language: en
+  features:
+    - navigation.expand
+    - navigation.sections
+    - navigation.top
+
+markdown_extensions:
+  - toc:
+      permalink: true
+      toc_depth: 4
+
+  - attr_list
+  - admonition
+  - pymdownx.details
+  - pymdownx.superfences
+
+plugins:
+  - search
+  - autorefs
+  - mkdocstrings:
+      default_handler: python
+      handlers:
+        python:
+          paths: ["."]
+          options:
+            docstring_style: google
+            show_source: true
+            members: true
+            show_if_no_docstring: true
+            inherited_members: true
+            members_order: source
+            filters: ["!^_"]
+  - gen-files:
+      scripts:
+        - docs/gen_api.py
+  - literate-nav:
+      nav_file: SUMMARY.md
+
+nav:
+  - Home: index.md
+  - Getting Started: getting_started.md
+  - Usage: usage.md
+  - API:
+      - Overview: api.md
+      - Modules: reference/

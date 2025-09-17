@@ -1,0 +1,802 @@
+[
+  {
+    "question": "What is the purpose of the first positional parameter ($1) in this script?",
+    "reference": "It specifies both the Docker image name and the base name for X11 environment variables. The script uses it as `lagger/$1` for the Docker image and passes it to x11docker."
+  },
+  {
+    "question": "Which port does the VNC server listen on, and how is it configured?",
+    "reference": "The VNC server listens on port $2, configured via the `-rfbport $2` parameter in the `x11vnc` command."
+  },
+  {
+    "question": "How is the X11 display size determined in this script?",
+    "reference": "The display size is determined by the third positional parameter ($3), passed to x11docker via `--size $3`."
+  },
+  {
+    "question": "What audio configuration is enabled for the X11 container?",
+    "reference": "PulseAudio is configured to use TCP with `--pulseaudio=tcp`, allowing audio forwarding over the network."
+  },
+  {
+    "question": "What Flask route serves static files from the 'arcade' directory?",
+    "reference": "The route `/arcade/<path:path>` serves files from the 'arcade' directory using `send_from_directory`."
+  },
+  {
+    "question": "Which functions are started as threads when a game is initiated via `start_catridge`?",
+    "reference": "The functions `run_game`, `run_vnc`, and `run_flask` are started as threads."
+  },
+  {
+    "question": "What command-line arguments does `run_game.sh` receive?",
+    "reference": "The script receives `game`, `port`, and `resolution` arguments as shown in this snippet:\n```bash\nbash run_game.sh $game $port $resolution\n```"
+  },
+  {
+    "question": "How is the XMPP user registration URL constructed?",
+    "reference": "The URL is constructed using this format:\n```python\nhttps://%s:%d/register/%s/%s\n``` where parameters are `xmpp_server`, `xmpp_register_port`, `username`, and `password`."
+  },
+  {
+    "question": "What is the structure of the session ID generated in `start_catridge`?",
+    "reference": "The session ID is generated as `game_id_player_id_PORT` where PORT is dynamically assigned."
+  },
+  {
+    "question": "How does `list_catridges` identify available games?",
+    "reference": "It searches for `thumbnail.png` files in subdirectories of `catridges/` using `glob.iglob`."
+  },
+  {
+    "question": "What HTTP headers are used to encrypt data in the `encode` function?",
+    "reference": "The URL includes `text` and `crypto_password` as path components for encryption:\n```python\nhttps://%s:%d/encrypt/%s/%s\n```"
+  },
+  {
+    "question": "What is the purpose of the `videorooms` attribute in `GameStreamingAgent`?",
+    "reference": "It stores session-to-room-number mappings as initialized in `setup()`:\n```python\nself.videorooms = {}\n```"
+  },
+  {
+    "question": "What is the purpose of the Flask route '/build_catridge/<game_id>'?",
+    "reference": "The Flask route '/build_catridge/<game_id>' is designed to handle POST requests for building a game cartridge. It expects a POST request containing a configuration file and optional game files."
+  },
+  {
+    "question": "What HTTP method is used for the '/build_catridge/<game_id>' route?",
+    "reference": "The '/build_catridge/<game_id>' route uses the POST HTTP method."
+  },
+  {
+    "question": "What is the purpose of the Flask route '/query/<query_string>'?",
+    "reference": "The Flask route '/query/<query_string>' is designed to handle queries to the database and return matching cartridges based on the provided query string."
+  },
+  {
+    "question": "What is the expected return value of the '/build_catridge/<game_id>' route?",
+    "reference": "The '/build_catridge/<game_id>' route is expected to return a JSON object indicating success and containing the Dockerfile."
+  },
+  {
+    "question": "What command-line argument is supported by the script?",
+    "reference": "The script supports the '--rest' command-line argument, which specifies whether the agent should be started as a RESTful server."
+  },
+  {
+    "question": "What is the default value of the 'REST' variable if the '--rest' argument is not provided?",
+    "reference": "The default value of the 'REST' variable is False if the '--rest' argument is not provided."
+  },
+  {
+    "question": "What is the purpose of the 'app.run()' call in the script?",
+    "reference": "The 'app.run()' call starts the Flask application, running the RESTful server if the '--rest' argument is specified."
+  },
+  {
+    "question": "What is the static URL path configured for the Flask application?",
+    "reference": "The static URL path configured for the Flask application is an empty string ('')."
+  },
+  {
+    "question": "What is the purpose of the `start_root_first.sh` script?",
+    "reference": "The script starts the Janus server and a registration agent using `screen` sessions, ensuring it is run as root."
+  },
+  {
+    "question": "What happens if the script is not run as root?",
+    "reference": "The script displays an error message 'This script must be run as root!' and exits with status code 1."
+  },
+  {
+    "question": "Which command is used to start the Janus server?",
+    "reference": "The command used is `screen -S Janus -d -m /opt/janus/bin/janus -d 5`."
+  },
+  {
+    "question": "What environment variable is set before starting the Janus server?",
+    "reference": "The `LD_LIBRARY_PATH` is set to `/usr/lib` before starting the Janus server."
+  },
+  {
+    "question": "How is the registration agent started in this script?",
+    "reference": "The registration agent is started using the command `screen -S laGGerRegister -d -m ./register_user_service.py`."
+  },
+  {
+    "question": "What instructions are provided to the user for reconnecting to the Janus server session?",
+    "reference": "The user is instructed to run `screen -r Janus` to reconnect to the Janus server session."
+  },
+  {
+    "question": "What command is used to install laGGer after navigating to its directory?",
+    "reference": "The command is:\n```bash\n./install.sh\n```"
+  },
+  {
+    "question": "Which configuration file must be edited to change SSL certificate paths or ports?",
+    "reference": "/config/organization.json"
+  },
+  {
+    "question": "What are the exact commands to start laGGer in sequence?",
+    "reference": "1. `sudo ./start_root_first.sh`\n2. `./start.sh`"
+  },
+  {
+    "question": "How does the port-forwarding script handle UDP and TCP ports in VirtualBox?",
+    "reference": "The script opens both TCP and UDP ports 49997-50100 using:\n```bash\nfor i in {49997..50100}; do\nVBoxManage modifyvm \"laGGer\" --natpf1 \"tcp-port$i,tcp,,$i,,$i\";\nVBoxManage modifyvm \"laGGer\" --natpf1 \"udp-port$i,udp,,$i,,$i\";\ndone\n```"
+  },
+  {
+    "question": "What is the default URL to access laGGer's interface?",
+    "reference": "http://dragon.foi.hr:49998/list_catridges?player_id=player2"
+  },
+  {
+    "question": "Which ports are explicitly opened for Janus in the VirtualBox configuration?",
+    "reference": "Ports 8088, 8089, and 8188 are opened for Janus."
+  },
+  {
+    "question": "Where can a pre-configured VirtualBox image for laGGer be downloaded?",
+    "reference": "From the Dropbox link: https://www.dropbox.com/sh/eu619xsmlpmyx5e/AAD3mqXy_BdZqRkS6v9P9ApAa?dl=1"
+  },
+  {
+    "question": "Which Croatian organization funded laGGer's development?",
+    "reference": "The Croatian Science Foundation under project IP-2019-04-5824."
+  },
+  {
+    "question": "What is the default configuration file path used by the `configuration` class?",
+    "reference": "The default configuration file path is `config/organization.json`."
+  },
+  {
+    "question": "What does the `__init__` method of the `configuration` class do?",
+    "reference": "The `__init__` method loads a JSON configuration file from the specified path and stores its key-value pairs in the instance's `__dict__`."
+  },
+  {
+    "question": "What is the purpose of the `__repr__` method in the `configuration` class?",
+    "reference": "The `__repr__` method returns a string representation of the instance's internal dictionary, allowing for a readable representation of the configuration object."
+  },
+  {
+    "question": "What happens when the `config.py` script is executed directly?",
+    "reference": "When executed directly, the script creates an instance of the `configuration` class using the default configuration file and prints the instance."
+  },
+  {
+    "question": "What is the purpose of the `transaction_id()` function?",
+    "reference": "The `transaction_id()` function generates a random 12-character string used as a unique identifier for transactions in the Janus communication protocol."
+  },
+  {
+    "question": "What does the `JanusPlugin.send()` method do?",
+    "reference": "The `JanusPlugin.send()` method sends a message to the Janus server by appending a transaction ID and making an HTTP POST request. It then processes the server's response, ensuring it is either an 'ack' or 'success'."
+  },
+  {
+    "question": "How is a Janus session created in the `JanusSession.create()` method?",
+    "reference": "The `JanusSession.create()` method creates a Janus session by sending a 'create' message to the Janus server, extracting the session ID from the response, and setting up the session URL for future requests."
+  },
+  {
+    "question": "What is the role of the `JanusSession._poll()` method?",
+    "reference": "The `JanusSession._poll()` method continuously polls the Janus server for events related to the session. It retrieves events and forwards them to the appropriate `JanusPlugin` instance."
+  },
+  {
+    "question": "What does the `VideoStreamingAgent.CreateRoom` class do?",
+    "reference": "The `VideoStreamingAgent.CreateRoom` class is a cyclic behavior that listens for messages to create a video room via the Janus plugin. It processes the message, creates the room, and sends a response back."
+  },
+  {
+    "question": "How is a Janus plugin attached to a session in the code?",
+    "reference": "A Janus plugin is attached to a session using the `JanusSession.attach()` method, which sends an 'attach' message with the plugin name and returns a `JanusPlugin` instance."
+  },
+  {
+    "question": "What is the purpose of the `VideoStreamingAgent.setup()` method?",
+    "reference": "The `VideoStreamingAgent.setup()` method initializes the agent by setting up the `CreateRoom` behavior, creating a Janus session, and initializing variables like `rooms` and `room`."
+  },
+  {
+    "question": "How is the Janus server URL constructed in the agent setup?",
+    "reference": "The Janus server URL is constructed using the `CONF.janus_host` and `CONF.janus_port` values from the configuration, formatted as `https://%s:%d/janus`."
+  },
+  {
+    "question": "What URL endpoint does this Flask service expose for user registration?",
+    "reference": "The endpoint is `/register/<username>/<password>`, which captures username and password parameters from the URL path."
+  },
+  {
+    "question": "Which external command is executed to register a user with Prosody?",
+    "reference": "The `prosodyctl register` command is executed with the username, XMPP server, and password arguments. Code snippet:\n```python\nsp.Popen([ 'prosodyctl', 'register', username, CONF.xmpp_server, password ], ...)\n```"
+  },
+  {
+    "question": "How is the XMPP server configuration value obtained?",
+    "reference": "It is retrieved from the `configuration()` class instance as `CONF.xmpp_server`, loaded from the `config` module."
+  },
+  {
+    "question": "What HTTP response is returned when a username is successfully registered?",
+    "reference": "The service returns `'OK'` when the Prosody output contains `'successfully registered'`."
+  },
+  {
+    "question": "How is the Flask app's SSL context configured?",
+    "reference": "The SSL context is set to `'adhoc'` when starting the app, enabling temporary self-signed certificates."
+  },
+  {
+    "question": "What error message is returned if Prosody registration fails?",
+    "reference": "If the first output line doesn't contain 'successfully registered', the service returns `'Error registering. Try another username.'`."
+  },
+  {
+    "question": "What is the purpose of the `say` method in the `TalkingAgent` class?",
+    "reference": "The `say` method prints a message prefixed with the agent's name, allowing the agent to output messages to the console."
+  },
+  {
+    "question": "How does the `say` method format the message it prints?",
+    "reference": "The `say` method formats the message by joining all arguments into a single string and prepending the agent's name in the format `'<agent_name>: <message>'`."
+  },
+  {
+    "question": "What is the role of `warnings.filterwarnings('ignore')` in the code?",
+    "reference": "It suppresses all warning messages to prevent them from being displayed during the execution of the script."
+  },
+  {
+    "question": "Which class does the `TalkingAgent` inherit from?",
+    "reference": "The `TalkingAgent` inherits from the `Agent` class in the `spade.agent` module."
+  },
+  {
+    "question": "What command is used to start the game streaming agent in a detached screen session?",
+    "reference": "The command used is: `screen -S laGGerGame -d -m ./game_streaming_agent.py`."
+  },
+  {
+    "question": "What is the purpose of the `screen -r laGGerGame` command mentioned in the script?",
+    "reference": "The `screen -r laGGerGame` command is used to reattach to the running game streaming agent session."
+  },
+  {
+    "question": "What is the full command to start the video streaming agent in a detached screen session?",
+    "reference": "The command is: `screen -S laGGerVideo -d -m ./video_streaming_agent.py`."
+  },
+  {
+    "question": "What key combination is described for exiting a screen session without terminating the program?",
+    "reference": "The key combination is `CTRL+a CTRL+d`."
+  },
+  {
+    "question": "What message is printed to inform the user about connecting to the video streaming agent?",
+    "reference": "The message is: `And to the laGGer video streaming agent with:` followed by the command `screen -r laGGerVideo`."
+  },
+  {
+    "question": "What is the first line of the script and what does it specify?",
+    "reference": "The first line is `#!/usr/bin/env bash`, which specifies that the script should be run using the Bash shell."
+  },
+  {
+    "question": "What command is used to install Docker in this script?",
+    "reference": "The script installs Docker using: `sudo apt -y install docker-ce docker-ce-cli containerd.io docker-buildx-plugin docker-compose-plugin` after adding the Docker repository."
+  },
+  {
+    "question": "Which Python version is explicitly installed and how?",
+    "reference": "Python 3.6.9 is installed by downloading the source tarball, extracting it, and running `./configure`, `make`, and `sudo make altinstall`."
+  },
+  {
+    "question": "What is the source URL for the Prosody configuration file?",
+    "reference": "The Prosody config file is downloaded from `https://pastebin.com/raw/j1CLcSLH` using `wget`."
+  },
+  {
+    "question": "Which specific Git commit hash is checked out for noVNC?",
+    "reference": "The script checks out noVNC at commit `cbf090fe701adc7776270be6725f886e185d2b85`."
+  },
+  {
+    "question": "What ports are opened for laGGer and Janus using ufw?",
+    "reference": "The script opens TCP/UDP ports 49996-60000 for laGGer and 8088-8089 (TCP/UDP), 8188 (TCP) for Janus using `sudo ufw allow`."
+  },
+  {
+    "question": "How does the script verify if Docker is already installed?",
+    "reference": "It checks with `dpkg -s \"docker-ce\"` and skips installation if it returns success."
+  },
+  {
+    "question": "What command is used to generate SSL server keys?",
+    "reference": "The script uses these OpenSSL commands:\n```bash\nsudo openssl genrsa -out /etc/ssl/mycerts/server.key 2048\nsudo openssl req -new -key /etc/ssl/mycerts/server.key -out /etc/ssl/mycerts/server.csr\nsudo openssl x509 -req -days 365 -in /etc/ssl/mycerts/server.csr -signkey /etc/ssl/mycerts/server.key -out /etc/ssl/mycerts/server.crt\n```"
+  },
+  {
+    "question": "What Docker image naming convention is used for game cartridges?",
+    "reference": "Images are tagged as `lagger/<subfolder_name>` where `<subfolder_name>` is the directory name under the `catridges` folder."
+  },
+  {
+    "question": "What is the purpose of the `/encrypt` endpoint?",
+    "reference": "It encrypts a plaintext string using a password via a custom substitution cipher and returns the result in JSON format."
+  },
+  {
+    "question": "What parameters does the `/decrypt` route accept?",
+    "reference": "It accepts `cyphertext` (the encrypted text) and `password` (the decryption key) as URL path parameters."
+  },
+  {
+    "question": "How is base64 encoding handled in the `b64enc` function?",
+    "reference": "```python\ndef b64enc( text ):\nx = b64encode( text.encode() )\nreturn bytes( str( x )[ 2:-1 ].translate( str( x )[ 2:-1 ].maketrans( B64, ABECEDA ) ), 'utf-8' ).decode( 'utf-8' )\n```\nReplaces standard base64 characters with a custom alphabet (`ABECEDA`)."
+  },
+  {
+    "question": "What is the value of the `ABECEDA` variable used in encryption?",
+    "reference": "```python\nabeceda_digrafi = 'abcćčdđǆefghijklǉmnǌoprsštuvzžABCĆČDĐǄEFGHIJKLǇMNǊOPRSŠTUVZŽ 123'\nABECEDA = abeceda_digrafi\n```\nA custom alphabet including Croatian digraphs, letters, and digits."
+  },
+  {
+    "question": "How does the `šifriraj` function perform encryption?",
+    "reference": "It applies a Vigenère cipher-like algorithm by shifting characters in `ABECEDA` using the password's character values at each position."
+  },
+  {
+    "question": "What SSL context is used when running the Flask app?",
+    "reference": "The `adhoc` SSL context is used, generating a temporary certificate for HTTPS."
+  },
+  {
+    "question": "How are errors handled in the `/encrypt` route?",
+    "reference": "Uncaught exceptions are printed to stdout, and the response returns `{'result': 'Error'}`."
+  },
+  {
+    "question": "What is the role of `ABECEDA.index` in the `dešifriraj` function?",
+    "reference": "It calculates the original character by subtracting the password's character value from the ciphertext's character index in the custom alphabet."
+  },
+  {
+    "question": "What environment variables are captured by the Xenv variable?",
+    "reference": "The Xenv variable captures environment variables from x11docker's --showenv output, which includes X11 display configuration needed to connect x11vnc to the container's virtual display."
+  },
+  {
+    "question": "What Docker image is being executed and what is its container name?",
+    "reference": "The Docker image 'lagger/$1' is executed with the container name $1, where $1 is the first script argument (e.g., if run_game.sh mygame 5900 1024x768, it would be 'lagger/mygame')."
+  },
+  {
+    "question": "What VNC server configuration is specified in this script?",
+    "reference": "The script configures x11vnc with: -noshm (disable SHM pixmaps), -forever (restart on failure), -localhost (bind to localhost), -rfbport $2 (VNC port from second argument), and -shared (allow multiple clients)."
+  },
+  {
+    "question": "What display size parameter is passed to x11docker?",
+    "reference": "The display size is passed via the third script argument ($3) to x11docker's --size parameter, which sets the virtual display dimensions (e.g., 1024x768)."
+  },
+  {
+    "question": "How does the system handle port allocation for new game sessions?",
+    "reference": "The 'rotate_port()' method increments the port by 3 each time, wrapping around when exceeding the configured end port. Code:\n```python\ndef rotate_port( self ):\nif self.port >= CONF.port_end:\nself.port = CONF.port_begin\nself.port += 3\nreturn self.port\n```"
+  },
+  {
+    "question": "What command is used to start the VNC server with SSL?",
+    "reference": "The 'run_vnc()' function uses 'novnc' with SSL certificate and key. Code:\n```python\ndef run_vnc( port1, port2 ):\n...\nwith sp.Popen( [ 'novnc', '--cert', cert, '--key', key, '--ssl-only', '--listen', str( port2 ), '--vnc', '0.0.0.0:%d' % port1 ], ... )\n```"
+  },
+  {
+    "question": "Which exception class is raised when XMPP user registration fails?",
+    "reference": "The 'XMPPRegisterException' class is raised when XMPP registration fails. Code:\n```python\nclass XMPPRegisterException( Exception ):\npass\n```"
+  },
+  {
+    "question": "How are game-specific configuration files loaded?",
+    "reference": "The 'configuration()' function loads JSON templates from 'catridges/<game>/catridge_template.json'. Code:\n```python\ndef run_game( game, port ):\ngconf = configuration( os.path.join( 'catridges', game, 'catridge_template.json' ) )\n```"
+  },
+  {
+    "question": "What SSL context is used for the Flask app?",
+    "reference": "The Flask app uses SSL context with certificate and key files specified in configuration. Code:\n```python\ndef run_flask():\napp.run( ..., ssl_context=( CONF.cert, CONF.key ) )\n```"
+  },
+  {
+    "question": "How are VNC connection URLs encoded for clients?",
+    "reference": "URLs are base64-encoded after constructing query parameters. Code:\n```python\ngurl = b64encode( gurl.encode() ).decode( 'ascii' )\nvurl = b64encode( vurl.encode() ).decode( 'ascii' )\n```"
+  },
+  {
+    "question": "Where is the configuration data sourced from?",
+    "reference": "Configuration is imported from a 'config' module using the 'configuration()' function. Code:\n```python\nfrom config import configuration\nCONF = configuration()\n```"
+  },
+  {
+    "question": "What HTTP methods are supported by the '/build_catridge/<game_id>' route?",
+    "reference": "The '/build_catridge/<game_id>' route supports the POST HTTP method."
+  },
+  {
+    "question": "What is the default value for the 'rest' command-line argument?",
+    "reference": "The default value for the 'rest' command-line argument is None."
+  },
+  {
+    "question": "What is the name of the Flask application instance?",
+    "reference": "The name of the Flask application instance is 'app'."
+  },
+  {
+    "question": "What is the static URL path for the Flask application?",
+    "reference": "The static URL path for the Flask application is an empty string ('')."
+  },
+  {
+    "question": "What is the expected return value of the '/query/<query_string>' route?",
+    "reference": "The '/query/<query_string>' route is expected to return None, but the comment indicates that it should return the result as JSON."
+  },
+  {
+    "question": "What environment variable is set before starting Janus?",
+    "reference": "The `LD_LIBRARY_PATH` environment variable is set to `/usr/lib` before starting Janus."
+  },
+  {
+    "question": "How is the registration agent started?",
+    "reference": "The registration agent is started using the command `screen -S laGGerRegister -d -m ./register_user_service.py` in a separate screen session."
+  },
+  {
+    "question": "What instructions are provided for reattaching to the screen sessions?",
+    "reference": "The script provides instructions to reattach to the Janus server with `screen -r Janus` and to the registration agent with `screen -r laGGerRegister`."
+  },
+  {
+    "question": "How is laGGer installed according to the provided instructions?",
+    "reference": "```bash\n./install.sh\n``` This script assumes a Debian Bullseye server and uses self-signed SSL certificates by default."
+  },
+  {
+    "question": "Which configuration file must be edited to change certificate paths or ports?",
+    "reference": "The `/config/organization.json` file contains default values for certificates, ports, and other settings."
+  },
+  {
+    "question": "What command opens ports 49997-50100 for TCP/UDP in VirtualBox?",
+    "reference": "```bash\nfor i in {49997..50100}; do VBoxManage modifyvm \"laGGer\" --natpf1 \"tcp-port$i,tcp,,$i,,$i\"; VBoxManage modifyvm \"laGGer\" --natpf1 \"udp-port$i,udp,,$i,,$i\"; done\n``` This script automates port forwarding for the VirtualBox VM."
+  },
+  {
+    "question": "What are the two scripts required to start laGGer?",
+    "reference": "Run `sudo ./start_root_first.sh` as root, then `./start.sh` as a normal user."
+  },
+  {
+    "question": "How do you trust self-signed certificates in Firefox for laGGer?",
+    "reference": "Import the certificate into Firefox's 'Authorities' tab via Options > Privacy & Security > Certificates > View Certificates, then trust it for identifying websites."
+  },
+  {
+    "question": "Which ports are explicitly opened by default in the VirtualBox configuration?",
+    "reference": "Ports 8088, 8089, and 8188 are opened via `VBoxManage modifyvm` commands in the configuration scripts."
+  },
+  {
+    "question": "What range of dynamic ports is opened for laGGer in VirtualBox?",
+    "reference": "Ports 49997 through 50100 (inclusive) are opened for both TCP and UDP traffic."
+  },
+  {
+    "question": "What is the purpose of the `transaction_id` function?",
+    "reference": "The `transaction_id` function generates a 12-character random string used as a unique identifier for transactions in the Janus communication protocol."
+  },
+  {
+    "question": "What does the `JanusPlugin.send` method do?",
+    "reference": "The `JanusPlugin.send` method sends a JSON payload to a Janus server, appending a transaction ID, and waits for a response. It validates the response to ensure it is either an 'ack' or 'success'."
+  },
+  {
+    "question": "What is the role of the `JanusSession.attach` method?",
+    "reference": "The `JanusSession.attach` method attaches a specified Janus plugin to the session, creates a `JanusPlugin` instance for it, and returns the plugin for further interaction."
+  },
+  {
+    "question": "What is the purpose of the `CreateRoom` class in `VideoStreamingAgent`?",
+    "reference": "The `CreateRoom` class is a cyclic behavior that listens for messages to create a video room using the Janus Videoroom plugin and responds with the result."
+  },
+  {
+    "question": "How is the Janus session initialized in `VideoStreamingAgent.setup`?",
+    "reference": "The Janus session is initialized by creating a `JanusSession` instance with the URL constructed from configuration values for the Janus host and port."
+  },
+  {
+    "question": "What is the function of the `VideoStreamingAgent` class?",
+    "reference": "The `VideoStreamingAgent` class is a subclass of `TalkingAgent` that handles video streaming functionality, including creating video rooms via the Janus Videoroom plugin."
+  },
+  {
+    "question": "What command-line argument does the script accept, and what does it do?",
+    "reference": "The script accepts the `--node` argument, which specifies whether the agent should be started as a node agent. If provided, it sets the `NODE` variable to `True`."
+  },
+  {
+    "question": "How is the `VideoStreamingAgent` instance started?",
+    "reference": "The `VideoStreamingAgent` instance is created with an XMPP address and password from the configuration, then started using the `start` method and its web interface is launched on a specified port."
+  },
+  {
+    "question": "What is the purpose of the Flask route '/register/<username>/<password>'?",
+    "reference": "The route is designed to handle user registration by calling the 'prosodyctl register' command with the provided username and password."
+  },
+  {
+    "question": "Which command is executed when a user registers via the '/register' endpoint?",
+    "reference": "The command executed is 'prosodyctl register <username> <xmpp_server> <password>', where <xmpp_server> is retrieved from the configuration."
+  },
+  {
+    "question": "How is the success of registration determined in the code?",
+    "reference": "Registration success is determined by checking if the output contains the string 'successfully registered'."
+  },
+  {
+    "question": "What is the default response if the registration fails?",
+    "reference": "If registration fails, the default response is 'Error registering. Try another username.'"
+  },
+  {
+    "question": "What configuration is loaded before running the Flask app?",
+    "reference": "The configuration is loaded from the 'configuration()' class in the 'config' module."
+  },
+  {
+    "question": "On which host and port does the Flask app run?",
+    "reference": "The Flask app runs on host '0.0.0.0' and the port specified by 'CONF.xmpp_register_port' from the configuration."
+  },
+  {
+    "question": "How is the `TalkingAgent` class related to the `Agent` class?",
+    "reference": "The `TalkingAgent` class inherits from the `Agent` class, as indicated by the line `class TalkingAgent( Agent ):`."
+  },
+  {
+    "question": "What does the `warnings.filterwarnings('ignore')` line do in the code?",
+    "reference": "It suppresses all warning messages from being displayed during the execution of the script."
+  },
+  {
+    "question": "What is the format of the output produced by the `say` method?",
+    "reference": "The output format is `<agent_name>: <message>`, where `<agent_name>` is the name of the agent and `<message>` is the joined string of the input arguments."
+  },
+  {
+    "question": "How can a user reattach to the laGGerGame screen session?",
+    "reference": "A user can reattach to the laGGerGame screen session by running `screen -r laGGerGame`."
+  },
+  {
+    "question": "What is the purpose of the `-d -m` flags in the `screen` command?",
+    "reference": "The `-d -m` flags in the `screen` command start a new screen session in detached mode, allowing it to run in the background."
+  },
+  {
+    "question": "What message is displayed to inform the user about exiting a screen session without terminating it?",
+    "reference": "The message displayed is: `To exit the session, without killing the program use CTRL+a CTRL+d`."
+  },
+  {
+    "question": "What is the name of the script that is executed to start the video streaming agent?",
+    "reference": "The script executed is `video_streaming_agent.py`."
+  },
+  {
+    "question": "What is the name of the screen session for the video streaming agent?",
+    "reference": "The screen session for the video streaming agent is named `laGGerVideo`."
+  },
+  {
+    "question": "How does the script check if Docker is already installed?",
+    "reference": "```bash\nif dpkg -s \"docker-ce\" >/dev/null 2>&1; then\necho \"Docker already installed, skipping.\"\nfi\n```"
+  },
+  {
+    "question": "Which URL is used to clone the noVNC repository?",
+    "reference": "https://github.com/novnc/noVNC.git"
+  },
+  {
+    "question": "What Python packages are installed via pip3.6?",
+    "reference": "jinja2==3.0.3, aiohttp-jinja2==1.2.0, spade==3.1.4, pytz, flask==2.0.3, aiortc, requests"
+  },
+  {
+    "question": "How are SSL server keys generated in this script?",
+    "reference": "```bash\nsudo openssl genrsa -out /etc/ssl/mycerts/server.key 2048\nsudo openssl req -new -key /etc/ssl/mycerts/server.key -out /etc/ssl/mycerts/server.csr\nsudo openssl x509 -req -days 365 -in /etc/ssl/mycerts/server.csr -signkey /etc/ssl/mycerts/server.key -out /etc/ssl/mycerts/server.crt\n```"
+  },
+  {
+    "question": "What ports are opened using ufw for laGGer and related services?",
+    "reference": "TCP/UDP 49996-60000 (laGGer), 8088-8089 (Janus), 5222-5223/5269/5443/5280/3478/1883 (Prosody)"
+  },
+  {
+    "question": "How does the script handle existing prosody.cfg.lua files?",
+    "reference": "If prosody.cfg.lua exists, it skips downloading and copying the config file."
+  },
+  {
+    "question": "What is the purpose of the 'cartridges_dir' variable?",
+    "reference": "It specifies the directory containing game subfolders to build Docker images for each game."
+  },
+  {
+    "question": "What is the purpose of the `/encrypt` route in the Flask application?",
+    "reference": "The `/encrypt/<plaintext>/<password>` route encrypts the provided plaintext using the specified password via the `šifriraj` function, returning the result as JSON. It uses base64 encoding on the plaintext before encryption."
+  },
+  {
+    "question": "How does the `b64enc` function modify standard base64 encoding?",
+    "reference": "The `b64enc` function replaces characters in the standard base64 output with a custom alphabet defined in `ABECEDA`, which includes Croatian letters and digraphs. This is done using the `translate` method with a custom translation table."
+  },
+  {
+    "question": "What is the structure of the custom alphabet used for encryption?",
+    "reference": "The custom alphabet `ABECEDA` is defined as 'abcćčdđǆefghijklǉmnǌoprsštuvzžABCĆČDĐǄEFGHIJKLǇMNǊOPRSŠTUVZŽ 123', combining Croatian letters, digraphs, and digits."
+  },
+  {
+    "question": "How does the `šifriraj` encryption function work?",
+    "reference": "The `šifriraj` function performs a Vigenère-like cipher by adding the index of each character in the plaintext and password (repeating the password as needed) modulo the alphabet length, using the custom `ABECEDA` alphabet."
+  },
+  {
+    "question": "What error handling exists in the `/decrypt` route?",
+    "reference": "The `/decrypt` route catches exceptions during decryption, prints the error to the console, and returns a JSON response with `{\"result\":\"Error\"}`."
+  },
+  {
+    "question": "How is the Flask application configured to run?",
+    "reference": "The app runs on all interfaces (`host='0.0.0.0'`) with an ad-hoc SSL context, using the port specified in `CONF.crypto_service_port` from the configuration."
+  },
+  {
+    "question": "What role does the `ABECEDA` constant play in the encryption/decryption process?",
+    "reference": "The `ABECEDA` constant defines the custom alphabet used for both the substitution cipher and base64 character mapping, ensuring consistent encryption/decryption with Croatian-specific characters."
+  },
+  {
+    "question": "How does the `dešifriraj` function reverse the encryption process?",
+    "reference": "The `dešifriraj` function subtracts the password character index from the ciphertext character index (modulo alphabet length) to recover the original plaintext using the same custom alphabet."
+  },
+  {
+    "question": "What is the purpose of the `--pulseaudio=tcp` option in the `x11docker` command?",
+    "reference": "Enables PulseAudio audio forwarding over TCP for the Docker container."
+  },
+  {
+    "question": "How is the VNC port specified in this script?",
+    "reference": "The VNC port is set via the `-rfbport $2` argument, where `$2` is the script's second positional parameter."
+  },
+  {
+    "question": "What Docker image is being executed?",
+    "reference": "The Docker image is specified by `lagger/$1`, where `$1` is the script's first positional parameter."
+  },
+  {
+    "question": "Show the exact `x11docker` command used to generate environment variables for X11 forwarding.",
+    "reference": "```bash\nx11docker -f --pulseaudio=tcp --xdummy --size $3 --showenv lagger/$1 $1\n```"
+  },
+  {
+    "question": "What directory is served as static content for the '/arcade/<path:path>' Flask route?",
+    "reference": "The 'arcade' directory is served as static content for the '/arcade/<path:path>' route."
+  },
+  {
+    "question": "What URL format is used to register XMPP users in the register() function?",
+    "reference": "The URL format is 'https://%s:%d/register/%s/%s' where parameters are (xmpp_server, xmpp_register_port, username, password)."
+  },
+  {
+    "question": "Which exception is raised when XMPP user registration fails with a non-200 HTTP status code?",
+    "reference": "The XMPPRegisterException is raised with an error message about communication failure with the server."
+  },
+  {
+    "question": "What shell script is executed by the run_game() function to start a game?",
+    "reference": "The 'run_game.sh' shell script is executed with arguments (game, port, resolution)."
+  },
+  {
+    "question": "How are ports allocated for new game sessions in the start_catridge() method?",
+    "reference": "Ports are allocated by incrementing the agent's 'port' attribute in steps of 3, wrapping around when exceeding CONF.port_end."
+  },
+  {
+    "question": "What encryption service URL is used by the encode() function?",
+    "reference": "The URL is 'https://%s:%d/encrypt/%s/%s' with parameters (crypto_service_host, crypto_service_port, text, crypto_password)."
+  },
+  {
+    "question": "What XMPP message metadata is used to request video room creation in PrepareGamingRoom?",
+    "reference": "The message metadata includes {'performative': 'request', 'content': 'create-room', 'reply-with': session_id}."
+  },
+  {
+    "question": "How are VNC and game processes started concurrently in start_catridge()?",
+    "reference": "They are started using _thread.start_new_thread() for run_game(), run_vnc(), and run_flask() in parallel."
+  },
+  {
+    "question": "What HTTP method is used for the '/query/<query_string>' route?",
+    "reference": "The '/query/<query_string>' route uses the GET HTTP method."
+  },
+  {
+    "question": "What command-line argument does the script accept, and what is its purpose?",
+    "reference": "The script accepts the '--rest' command-line argument. It is a boolean flag that specifies whether the agent should be started as a RESTful server."
+  },
+  {
+    "question": "What is the default value of the 'REST' variable if no '--rest' argument is provided?",
+    "reference": "The default value of the 'REST' variable is False if no '--rest' argument is provided."
+  },
+  {
+    "question": "What is the current placeholder return value for the '/build_catridge/<game_id>' route?",
+    "reference": "The current placeholder return value for the '/build_catridge/<game_id>' route is None, with a comment indicating that it should return success and Dockerfile data as JSON."
+  },
+  {
+    "question": "What is the current placeholder return value for the '/query/<query_string>' route?",
+    "reference": "The current placeholder return value for the '/query/<query_string>' route is None, with a comment indicating that it should return query results as JSON."
+  },
+  {
+    "question": "What is the name of the screen session for the registration agent?",
+    "reference": "The screen session for the registration agent is named `laGGerRegister`."
+  },
+  {
+    "question": "What command is used to start the registration agent?",
+    "reference": "The command used is `screen -S laGGerRegister -d -m ./register_user_service.py`."
+  },
+  {
+    "question": "How do you install laGGer according to the provided instructions?",
+    "reference": "Run the following commands:\n```bash\n$ cd laGGer\n$ ./install.sh\n```"
+  },
+  {
+    "question": "Which configuration file needs to be edited to change SSL certificate paths?",
+    "reference": "The `/config/organization.json` file contains the 'cert' and 'key' values that should be modified for custom certificates."
+  },
+  {
+    "question": "What command opens port 8088 for TCP traffic in VirtualBox?",
+    "reference": "```bash\nVBoxManage modifyvm \"laGGer\" --natpf1 \"janus1,tcp,,8088,,8088\"\n```"
+  },
+  {
+    "question": "What is the default URL to access laGGer's interface after setup?",
+    "reference": "The interface is accessible at `http://dragon.foi.hr:49998/list_catridges?player_id=player2`."
+  },
+  {
+    "question": "Which script must be run first to start laGGer, and with what privileges?",
+    "reference": "Run `sudo ./start_root_first.sh` as root, followed by `./start.sh` as a normal user."
+  },
+  {
+    "question": "How are ports 49997–50100 configured for TCP/UDP forwarding in VirtualBox?",
+    "reference": "```bash\nfor i in {49997..50100}; do\nVBoxManage modifyvm \"laGGer\" --natpf1 \"tcp-port$i,tcp,,$i,,$i\";\nVBoxManage modifyvm \"laGGer\" --natpf1 \"udp-port$i,udp,,$i,,$i\";\ndone\n```"
+  },
+  {
+    "question": "What funding source supports laGGer according to the documentation?",
+    "reference": "The Croatian Science Foundation under project number IP-2019-04-5824."
+  },
+  {
+    "question": "How do you trust self-signed certificates in Firefox for laGGer's domain?",
+    "reference": "Import the certificate via Firefox's 'Certificate Manager' under 'Authorities', checking 'Trust this CA to identify websites'."
+  },
+  {
+    "question": "How is the Janus session created in the `JanusSession` class?",
+    "reference": "The Janus session is created by sending a 'create' message to the Janus server using an HTTP POST request. The session URL is then updated with the session ID returned in the response."
+  },
+  {
+    "question": "What does the `CreateRoom` class do in the `VideoStreamingAgent`?",
+    "reference": "The `CreateRoom` class is a cyclic behavior that listens for messages to create a video room. It processes incoming messages, creates a room via the Janus plugin, and sends a response with the result."
+  },
+  {
+    "question": "How is a Janus plugin attached to a session in the `JanusSession` class?",
+    "reference": "A Janus plugin is attached by sending an 'attach' message with the plugin name to the session URL. The plugin ID is extracted from the response, and a `JanusPlugin` instance is created and stored."
+  },
+  {
+    "question": "What is the role of the `setup` method in the `VideoStreamingAgent` class?",
+    "reference": "The `setup` method initializes the agent by adding the `CreateRoom` behavior, setting up the Janus session, and preparing metadata for room creation requests."
+  },
+  {
+    "question": "How is the Janus session destroyed in the `JanusSession` class?",
+    "reference": "The Janus session is destroyed by sending a 'destroy' message to the session URL, canceling the polling task, and closing the HTTP client session."
+  },
+  {
+    "question": "What is the purpose of the `JanusPlugin` class?",
+    "reference": "The `JanusPlugin` class is used to interact with a specific Janus plugin. It sends messages to the plugin and handles responses, using a queue to manage asynchronous communication."
+  },
+  {
+    "question": "How is the `VideoStreamingAgent` started in the main block?",
+    "reference": "The `VideoStreamingAgent` is started by creating an instance with the agent's name and password, calling the `start` method, and starting its web interface on the specified port."
+  },
+  {
+    "question": "What is the purpose of the Flask route `/register/<username>/<password>` in the `register_user_service.py` file?",
+    "reference": "The Flask route `/register/<username>/<password>` is designed to handle user registration by invoking the `prosodyctl register` command with the provided username, password, and XMPP server configuration."
+  },
+  {
+    "question": "Which configuration object is used to determine the XMPP server and registration port in `register_user_service.py`?",
+    "reference": "The configuration object `CONF` is used, which is instantiated from the `configuration` class in the `config` module."
+  },
+  {
+    "question": "What command is executed when a user attempts to register via the `/register/<username>/<password>` route?",
+    "reference": "The command executed is `prosodyctl register <username> <xmpp_server> <password>`, where `<xmpp_server>` is retrieved from the configuration."
+  },
+  {
+    "question": "What is the expected success message from the `prosodyctl register` command that triggers a 'OK' response?",
+    "reference": "The expected success message is 'successfully registered'."
+  },
+  {
+    "question": "What is the default host and port used by the Flask application in `register_user_service.py`?",
+    "reference": "The Flask application runs on host `0.0.0.0` and the port is determined by the `CONF.xmpp_register_port` configuration value."
+  },
+  {
+    "question": "What is the SSL context setting used when running the Flask application?",
+    "reference": "The SSL context is set to `'adhoc'`."
+  },
+  {
+    "question": "What class does the `TalkingAgent` class inherit from?",
+    "reference": "The `TalkingAgent` class inherits from the `Agent` class."
+  },
+  {
+    "question": "How are warnings handled in this code?",
+    "reference": "Warnings are ignored by using `warnings.filterwarnings('ignore')`."
+  },
+  {
+    "question": "What is the structure of the `say` method's output?",
+    "reference": "The output is formatted as `<agent_name>: <message>`, where `<message>` is the space-joined string representation of the arguments passed to `say`."
+  },
+  {
+    "question": "What command is used to start the video streaming agent in a detached screen session?",
+    "reference": "The command is `screen -S laGGerVideo -d -m ./video_streaming_agent.py`."
+  },
+  {
+    "question": "What command is provided to reattach to the laGGerGame screen session?",
+    "reference": "The command is `screen -r laGGerGame`."
+  },
+  {
+    "question": "What command is provided to reattach to the laGGerVideo screen session?",
+    "reference": "The command is `screen -r laGGerVideo`."
+  },
+  {
+    "question": "What key combination is mentioned for exiting a screen session without terminating the program?",
+    "reference": "The key combination is `CTRL+a CTRL+d`."
+  },
+  {
+    "question": "What message is displayed after starting the agents to inform the user about reattachment commands?",
+    "reference": "The message is: 'If there were no errors above you can connect to the laGGer game streaming agent with:' followed by the reattachment commands for both agents."
+  },
+  {
+    "question": "What command is used to install Python 3.6.9 from source?",
+    "reference": "```bash\nwget https://www.python.org/ftp/python/3.6.9/Python-3.6.9.tgz\ntar -xf Python-3.6.9.tgz\ncd Python-3.6.9\n./configure --enable-optimizations\nmake -j $(nproc)\nsudo make altinstall\n```"
+  },
+  {
+    "question": "Which noVNC Git commit hash is explicitly checked out?",
+    "reference": "The script checks out commit `cbf090fe701adc7776270be6725f886e185d2b85` of the noVNC repository."
+  },
+  {
+    "question": "What ports are opened for laGGer services using ufw?",
+    "reference": "The script opens TCP/UDP ports 49996-60000 for laGGer services."
+  },
+  {
+    "question": "What SSL certificate commands are used to generate server keys?",
+    "reference": "```bash\nsudo openssl genrsa -out /etc/ssl/mycerts/server.key 2048\nsudo openssl req -new -key /etc/ssl/mycerts/server.key -out /etc/ssl/mycerts/server.csr\nsudo openssl x509 -req -days 365 -in /etc/ssl/mycerts/server.csr -signkey /etc/ssl/mycerts/server.key -out /etc/ssl/mycerts/server.crt\n```"
+  },
+  {
+    "question": "Which Python packages are installed via pip3.6?",
+    "reference": "The script installs: jinja2==3.0.3, aiohttp-jinja2==1.2.0, spade==3.1.4, pytz, flask==2.0.3, aiortc, requests."
+  },
+  {
+    "question": "What directory is scanned for Docker game image builds?",
+    "reference": "The script scans the `catridges` directory for subdirectories to build Docker images."
+  },
+  {
+    "question": "How is the noVNC launcher linked to the user's bin directory?",
+    "reference": "It creates a symlink: `ln -s $INSTALLDIR/noVNC/utils/launch.sh ~/bin/novnc` after ensuring the directory exists."
+  },
+  {
+    "question": "What encryption algorithm is implemented in the `/encrypt` route?",
+    "reference": "The service uses a custom Vigenère cipher with a substitution alphabet defined in `ABECEDA`, which includes Croatian characters and digraphs."
+  },
+  {
+    "question": "What is the structure of the custom base64 alphabet (`ABECEDA`)?",
+    "reference": "```python\nABECEDA = 'abcćčdđǆefghijklǉmnǌoprsštuvzžABCĆČDĐǄEFGHIJKLǇMNǊOPRSŠTUVZŽ 123'\n``` This alphabet includes lowercase/uppercase letters, digraphs (e.g., Ć, Đ), and digits."
+  },
+  {
+    "question": "What is the purpose of the `/decrypt` endpoint?",
+    "reference": "It decrypts a cyphertext using the same Vigenère cipher logic, first applying `dešifriraj` (custom decryption) and then decoding the result from the custom base64 format."
+  },
+  {
+    "question": "What error handling is implemented for encryption/decryption operations?",
+    "reference": "Both routes catch exceptions and return `{\"result\":\"Error\"}`. Errors are also printed to the console via `print(e)`. No detailed error messages are exposed to clients."
+  }
+]

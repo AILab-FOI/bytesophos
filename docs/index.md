@@ -87,4 +87,4 @@ To start using the app, just visit `http://localhost:5173`.
 
 ## License
 
-This project is licensed under the MIT License. See the [LICENSE](./LICENSE) file for details.
+This project is licensed under the MIT License. See the LICENSE file in Git repo for details.
